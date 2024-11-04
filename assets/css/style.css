@@ -1,6 +1,20 @@
 body {
-    background-color: #fdfdfd;
+    background-color: #fafafa;
     padding-top: 70px;
+}
+
+#cartList {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    width: 300px;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    z-index: 1000;
+    display: none;
+    /* Tampilkan ini hanya saat tombol keranjang di klik */
 }
 
 
@@ -30,7 +44,7 @@ button.btn-primary {
     margin-bottom: 20px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: auto) {
     body {
         padding-top: 50px;
         /* Sesuaikan dengan tinggi navbar pada layar kecil */
@@ -44,7 +58,7 @@ button.btn-primary {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1030;
+    z-index: 1021;
     background-color: #f57224;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 0.5rem 1rem;
@@ -115,6 +129,19 @@ button.btn-primary {
     background-color: white;
     border-radius: 4px;
     padding: 4px;
+}
+
+.btn-keranjang {
+    background-color: #ff5e00;
+    border: 1;
+    border-color: #ff7829;
+    color: black;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-keranjang:hover {
+    background-color: #ffe033;
+    transform: scale(1.05);
 }
 
 
@@ -218,11 +245,11 @@ button.btn-primary {
     /* Jarak dari atas, disesuaikan dengan tinggi navbar */
     z-index: 1020;
     /* Pastikan tetap di atas konten lain, lebih rendah dari navbar */
-    background-color: #fff;
+    background-color: #fafafa;
     /* Warna latar belakang untuk mencegah konten di belakang terlihat */
     padding: 10px;
     /* Tambahan padding jika diperlukan */
-    box-shadow: 0 4px #f57224;
+    box-shadow: 0 1px #f57224;
     /* Efek bayangan untuk memberikan kedalaman */
 }
 
@@ -244,7 +271,8 @@ button.btn-primary {
 .card {
     position: relative;
     overflow: hidden;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    border: 0;
+    /* box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); */
     /* Shadow replacing border */
     padding-bottom: 3px;
     /* Extra space for the Buy Now button */
@@ -403,11 +431,12 @@ button.btn-primary {
 
 /* Card shadow for service boxes */
 
-.card.shadow {
+
+/* .card.shadow {
     box-shadow: 2px 4px 5px 0px rgba(56, 56, 56, 0.5);
     -webkit-box-shadow: 2px 4px 5px 0px rgba(56, 56, 56, 0.5);
     -moz-box-shadow: 2px 4px 5px 0px rgba(56, 56, 56, 0.5);
-}
+} */
 
 
 /* Responsive styling */

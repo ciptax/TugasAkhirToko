@@ -575,6 +575,7 @@ const products = [{
 const productList = document.getElementById("productList");
 const searchInput = document.getElementById("searchInput");
 const searchButton = document.getElementById("searchButton");
+const cart = JSON.parse(localStorage.getItem("cart")) || []; // Ambil keranjang dari localStorage atau buat array kosong jika belum ada
 
 let currentPage = 1;
 const productsPerPage = 36; // Jumlah produk per halaman
@@ -606,7 +607,7 @@ function displayProducts(filteredProducts) {
                         <p class="card-text"><strong>Harga: ${product.price}</strong></p>
                         <div class="d-flex align-items-center">
                             <input type="number" min="0" value="0" class="form-control" style="width: 70px;" id="quantity-${product.id}">
-                            <button class="btn btn-primary btn-cart ms-2">
+                            <button class="btn btn-primary btn-cart ms-2" onclick="addToCart(${product.id})">
                                 <i class="bi bi-cart"></i>
                             </button>
                         </div>
@@ -660,3 +661,74 @@ function filterByCategory(category) {
     currentPage = 1; // Reset halaman saat memfilter kategori
     displayProducts(filteredProducts);
 }
+
+// Fungsi untuk menambah produk ke keranjang
+function addToCart(productId) {
+    const product = products.find((item) => item.id === productId);
+    const quantityInput = document.getElementById(`quantity-${productId}`);
+    const quantity = parseInt(quantityInput.value);
+
+    if (quantity > 0) {
+        // Konversi harga produk ke angka, hilangkan "Rp" dan tanda titik jika ada
+        const price = parseInt(product.price.replace("Rp", "").replace(/\./g, ""));
+        const totalPrice = price * quantity;
+
+        // Tambahkan produk dan kuantitas serta total harga ke keranjang
+        cart.push({...product, quantity, totalPrice });
+
+        // Simpan keranjang ke localStorage
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // Perbarui notifikasi keranjang
+        updateCartNotification();
+
+        // Kosongkan input kuantitas
+        quantityInput.value = 0;
+    } else {
+        alert("Masukkan jumlah yang valid.");
+    }
+}
+
+// Fungsi untuk memperbarui notifikasi jumlah barang di keranjang
+function updateCartNotification() {
+    const cartButton = document.querySelector(".btn-keranjang");
+    const cartCount = cart.length;
+    cartButton.innerHTML = `<i class="bi bi-cart"></i> (${cartCount})`;
+}
+
+// Fungsi untuk menampilkan barang yang ada di keranjang dengan gambar produk dan total harga
+function showCartItems() {
+    const cartListContainer = document.getElementById("cartList");
+    cartListContainer.innerHTML = "";
+
+    if (cart.length === 0) {
+        cartListContainer.innerHTML = "<p>Keranjang kosong</p>";
+    } else {
+        cart.forEach((item) => {
+            const cartItemHTML = `
+                <div class="d-flex align-items-center mb-3">
+                    <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; margin-right: 10px;">
+                    <div>
+                        <h5>${item.name}</h5>
+                        <p>Jumlah: ${item.quantity}</p>
+                        <p>Harga per unit: Rp${item.price}</p>
+                        <p><strong>Total: Rp${item.totalPrice}</strong></p>
+                    </div>
+                </div>
+                <hr>
+            `;
+            cartListContainer.insertAdjacentHTML("beforeend", cartItemHTML);
+        });
+    }
+}
+
+// Tambahkan event listener untuk tombol keranjang di navigasi
+document.querySelector(".btn-keranjang").addEventListener("click", () => {
+    const cartListContainer = document.getElementById("cartList");
+    cartListContainer.style.display =
+        cartListContainer.style.display === "none" ? "block" : "none";
+    showCartItems(); // Memanggil fungsi untuk menampilkan item keranjang
+});
+
+// Perbarui notifikasi keranjang saat halaman dimuat
+updateCartNotification();
